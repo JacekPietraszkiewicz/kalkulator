@@ -1,0 +1,71 @@
+# Kalkulator - Jacek Pietraszkiewicz
+
+################ MODULY ################
+import logging
+from termcolor import colored
+
+################ FUNKCJE ###############
+def czy_liczba(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+def dzialania():
+    wybor = input("Podaj działanie, posługując się odpowiednią liczbą: "
+          + colored("1", "yellow") + " - Dodawanie, " +
+          colored("2", "yellow") + " - Odejmowanie, " +
+          colored("3", "yellow") + " - Mnożenie, " +
+          colored("4", "yellow") + " - Dzielenie: ")
+
+    if wybor.isnumeric() and (int(wybor) == 1 or int(wybor) == 2 or int(wybor) == 3 or int(wybor) == 4):
+        return int(wybor)
+    else:
+        logging.warning("Bląd wyboru dzialania!")
+        exit(1)
+
+def skladniki(dzialanie):
+    while True:
+        skladnik1 = input("Podaj pierwszy składnik: ")
+        if czy_liczba(skladnik1):
+            break
+        else:
+            logging.warning("Nie wprowadzono liczby! Spróbuj jeszcze raz.")
+            continue
+
+    while True:
+        skladnik2 = input("Podaj drugi składnik: ")
+        if czy_liczba(skladnik2):
+            if dzialanie == 4 and float(skladnik2) == 0:
+                logging.warning("W dzieleniu liczb rzeczywistych dzielnik nie może = 0")
+                continue
+            else:
+                break
+        else:
+            logging.warning("Nie wprowadzono liczby! Spróbuj jeszcze raz. ")
+    return float(skladnik1), float(skladnik2)
+
+def wyniki(*args):
+    if args[0] == 1:
+        wynik = args[1][0] + args[1][1]
+    elif args[0] == 2:
+        wynik = args[1][0] - args[1][1]
+    elif args[0] == 3:
+        wynik = args[1][0] * args[1][1]
+    elif args[0] == 4:
+        wynik = args[1][0] / args[1][1]
+    return wynik
+
+                              ############ CIALO #####################
+if __name__ == "__main__":
+                              ############ STALE #####################
+    lista_dzialan = {1: 'Dodaję', 2: 'Odejmuję', 3: 'Mnożę', 4: 'Dzielę'}
+
+
+                              ############ PROGRAM ###################
+    dzialanie = dzialania()
+    skladniki = skladniki(dzialanie)
+    wynik = round(wyniki(dzialanie, skladniki),5)
+    print('\n'+ lista_dzialan[dzialanie] +' '+ colored(str((skladniki[0])), "yellow") + ' i ' + colored(str(skladniki[1]),"yellow")
+          + "\nWynik to: " + colored(str(wynik), "yellow"))
